@@ -5,7 +5,7 @@
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="3.2"
+ADOVMS_VER="3.5"
 
 # Roundcube version
 ROUNDCUBE="1.2.0"
@@ -27,7 +27,7 @@ POSTFIX_REPLY_FILTER="https://raw.githubusercontent.com/magenx/magenx-email-serv
 DOVECOT_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/dovecot.conf"
 DOVECOT_SQL_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/dovecot-sql.conf"
 CLAMAV_MILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/clamav-milter.conf"
-CLAMAV_SCAN="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/scan.conf"
+CLAMAV_SCAN="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/mailscan.conf"
 
 # Virus alert
 VIRUS_ALERT="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/virus_alert.sh"
@@ -496,7 +496,7 @@ WHITETXT "Writing Clamav-Milter config"
 wget -qO /etc/mail/clamav-milter.conf ${CLAMAV_MILTER}
 echo
 WHITETXT "Writing Clamav-Scanner config"
-wget -qO /etc/clamd.d/scan.conf ${CLAMAV_SCAN}
+wget -qO /etc/clamd.d/mailscan.conf ${CLAMAV_SCAN}
 echo
 
 WHITETXT "Writing Virus alert script"
@@ -505,17 +505,15 @@ chmod +x /etc/clamd.d/virus_alert.sh
 sed -i "s/ADMIN_MAIL/${VMB_ADMIN_MAIL}/" /etc/clamd.d/virus_alert.sh
 
 mkdir -p /var/log/clamd.scan
-touch /var/log/clamd.scan/clamd.scan.log
+touch /var/log/clamd.scan/mailscan.log
 chown -R clamscan:clamscan /var/log/clamd.scan
 
-systemctl enable clamd@scan.service
 systemctl enable clamav-milter.service
 systemctl enable opendkim.service
-systemctl enable clamd@scan
+systemctl enable clamd@mailscan
 
-systemctl start clamd@scan
-systemctl start clamd@scan.service
-systemctl start clamav-milter.service
+systemctl restart clamd@mailscan
+systemctl restart clamav-milter.service
 systemctl restart postfix.service
 systemctl restart dovecot.service
 
