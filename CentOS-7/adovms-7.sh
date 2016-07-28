@@ -5,10 +5,10 @@
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="3.5"
+ADOVMS_VER="3.6"
 
 # Roundcube version
-ROUNDCUBE="1.2.0"
+ROUNDCUBE="1.2.1"
 
 # Repositories
 REPO_GF="http://mirror.symnds.com/distributions/gf/el/7/gf/x86_64/gf-release-7-10.gf.el7.noarch.rpm"
@@ -507,6 +507,9 @@ sed -i "s/ADMIN_MAIL/${VMB_ADMIN_MAIL}/" /etc/clamd.d/virus_alert.sh
 mkdir -p /var/log/clamd.scan
 touch /var/log/clamd.scan/mailscan.log
 chown -R clamscan:clamscan /var/log/clamd.scan
+
+sed -i "/^Example/d" /etc/freshclam.conf
+sed -i "/^FRESHCLAM_DELAY/d" /etc/sysconfig/freshclam
 
 systemctl enable clamav-milter.service
 systemctl enable opendkim.service
