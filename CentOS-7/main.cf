@@ -21,6 +21,7 @@ additional_config_dir = /etc/postfix/config
 smtpd_forbidden_commands = CONNECT GET POST
 smtpd_tls_cert_file = VMB_SSL_CRT
 smtpd_tls_key_file = VMB_SSL_KEY
+smtp_tls_CAfile = 
 smtpd_tls_auth_only = yes
 smtpd_tls_security_level = may
 smtpd_tls_protocols=!SSLv2,!SSLv3
