@@ -5,7 +5,7 @@
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="3.6"
+ADOVMS_VER="3.7"
 
 # Roundcube version
 ROUNDCUBE="1.2.2"
@@ -270,7 +270,7 @@ echo
 echo -n "---> Download and configure ViMbAdmin 3? [y/n][n]:"
 read vmb_down
 if [ "${vmb_down}" == "y" ];then
-     read -e -p "---> Edit your installation folder full path: " -i "/var/www/html/vmb" VMB_PATH
+     read -e -p "---> Edit your installation folder full path: " -i "/var/www/html/vimbadmin" VMB_PATH
         echo
         echo "  ViMbAdmin will be installed into:" 
 		GREENTXT ${VMB_PATH}
@@ -316,7 +316,7 @@ echo
 echo -n "---> Download and configure ROUNDCUBE v${ROUNDCUBE}? [y/n][n]:"
 read rcb_down
 if [ "${rcb_down}" == "y" ];then
-     read -e -p "---> Edit your installation folder full path: " -i "/var/www/html/rcb" RCB_PATH
+     read -e -p "---> Edit your installation folder full path: " -i "/var/www/html/roundcube" RCB_PATH
         echo
         echo "  ROUNDCUBE will be installed into:" 
 		GREENTXT ${RCB_PATH}
@@ -368,10 +368,10 @@ if [ "${vmb_pass_gen}" == "y" ];then
 fi
 echo
 echo
-read -p "---> Enter MySQL ROOT password : " MYSQL_ROOT_PASS
-read -p "---> Enter ViMbAdmin database host : " VMB_DB_HOST
-read -p "---> Enter ViMbAdmin database name : " VMB_DB_NAME
-read -p "---> Enter ViMbAdmin database user : " VMB_DB_USER_NAME
+read -e -p "---> Enter MySQL ROOT password : " MYSQL_ROOT_PASS
+read -e -p "---> Enter ViMbAdmin database host : " VMB_DB_HOST
+read -e -p "---> Enter ViMbAdmin database name : " VMB_DB_NAME
+read -e -p "---> Enter ViMbAdmin database user : " VMB_DB_USER_NAME
 echo
 mysql -u root -p${MYSQL_ROOT_PASS} <<EOMYSQL
 CREATE USER '${VMB_DB_USER_NAME}'@'${VMB_DB_HOST}' IDENTIFIED BY '${VMB_PASSGEN}';
@@ -398,10 +398,10 @@ if [ "${rcb_pass_gen}" == "y" ];then
 fi
 echo
 echo
-read -p "---> Enter MySQL ROOT password : " MYSQL_ROOT_PASS
-read -p "---> Enter ROUNDCUBE database host : " RCB_DB_HOST
-read -p "---> Enter ROUNDCUBE database name : " RCB_DB_NAME
-read -p "---> Enter ROUNDCUBE database user : " RCB_DB_USER_NAME
+read -e -p "---> Enter MySQL ROOT password : " MYSQL_ROOT_PASS
+read -e -p "---> Enter ROUNDCUBE database host : " RCB_DB_HOST
+read -e -p "---> Enter ROUNDCUBE database name : " RCB_DB_NAME
+read -e -p "---> Enter ROUNDCUBE database user : " RCB_DB_USER_NAME
 echo
 mysql -u root -p${MYSQL_ROOT_PASS} <<EOMYSQL
 CREATE USER '${RCB_DB_USER_NAME}'@'${RCB_DB_HOST}' IDENTIFIED BY '${RCB_PASSGEN}';
@@ -451,9 +451,9 @@ query = SELECT maildir FROM mailbox WHERE username = '%s' AND active = '1'
 END
 echo
 WHITETXT "Writing Postfix main.cf file"
-read -p "---> Enter your domain : " VMB_DOMAIN
-read -p "---> Enter your hostname : " VMB_MYHOSTNAME
-read -p "---> Enter your admin email : " VMB_ADMIN_MAIL
+read -e -p "---> Enter your domain : " VMB_DOMAIN
+read -e -p "---> Enter your hostname : " VMB_MYHOSTNAME
+read -e -p "---> Enter your admin email : " VMB_ADMIN_MAIL
 read -e -p "---> Enter your ssl cert location: " -i "/etc/ssl/domain.crt"  VMB_SSL_CRT
 read -e -p "---> Enter your ssl key location: " -i "/etc/ssl/server.key"  VMB_SSL_KEY
 
@@ -527,7 +527,7 @@ echo
 WHITETXT "Now we going to configure opendkim - generating signing key and configs"
 echo
 echo
-read -p "---> Enter your domains: domain1.com domain2.net domain3.eu: " DKIM_DOMAINS
+read -e -p "---> Enter your domains: domain1.com domain2.net domain3.eu: " DKIM_DOMAINS
 echo
 echo
 for DOMAIN in ${DKIM_DOMAINS}
@@ -581,7 +581,7 @@ echo
 WHITETXT "============================================================================="
 WHITETXT "============================================================================="
 echo
-VMB_PATH=$(cat /root/adovms/.adovms_index | grep mail | awk '{print $2}')
+VMB_PATH=$(awk '/mail/ {print $2}' /root/adovms/.adovms_index)
 WHITETXT "Now we will try to edit ViMbAdmin v3 application.ini file:"
 WHITETXT "${VMB_PATH}/application/configs/application.ini"
 cd ${VMB_PATH}
