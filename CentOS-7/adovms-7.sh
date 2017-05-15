@@ -1,11 +1,11 @@
 #!/bin/bash
 #====================================================================#
 #  MagenX - Automated Deployment of Virtual Mail Server              #
-#  Copyright (C) 2016 admin@magenx.com                               #
+#  Copyright (C) 2017 admin@magenx.com                               #
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="3.8"
+ADOVMS_VER="3.9"
 
 # Roundcube version
 ROUNDCUBE="1.2.5"
@@ -231,7 +231,7 @@ if [ "${mail_install}" == "y" ];then
     echo
     pear config-set preferred_state alpha >/dev/null 2>&1
     pear install ${PEAR} >/dev/null 2>&1
-    rpm -qa | grep -qw epel-release || yum -q -y install epel-release
+    yum -q -y install epel-release
     yum -q -y install ${REPO_GF}
     yum --enablerepo=gf-plus -y install ${MAIL_PACKAGES}
     yum --enablerepo=epel-testing -y install ${EXTRA_PACKAGES} 
@@ -454,8 +454,8 @@ WHITETXT "Writing Postfix main.cf file"
 read -e -p "---> Enter your domain : " VMB_DOMAIN
 read -e -p "---> Enter your hostname : " VMB_MYHOSTNAME
 read -e -p "---> Enter your admin email : " VMB_ADMIN_MAIL
-read -e -p "---> Enter your ssl cert location: " -i "/etc/ssl/domain.crt"  VMB_SSL_CRT
-read -e -p "---> Enter your ssl key location: " -i "/etc/ssl/server.key"  VMB_SSL_KEY
+read -e -p "---> Enter your ssl cert location: " -i "/etc/letsencrypt/live/example.com/fullchain.pem"  VMB_SSL_CRT
+read -e -p "---> Enter your ssl key location: " -i "/etc/letsencrypt/live/example.com/privkey.pem"  VMB_SSL_KEY
 
 wget -qO /etc/postfix/main.cf ${POSTFIX_MAIN_CF}
 sed -i "s,VMB_SSL_CRT,${VMB_SSL_CRT}," /etc/postfix/main.cf
