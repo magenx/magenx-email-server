@@ -596,7 +596,7 @@ sed -i "s/resources.doctrine2.connection.options.password = 'xxx'/resources.doct
 sed -i "s/resources.doctrine2.connection.options.host     = 'localhost'/resources.doctrine2.connection.options.host     = '${VMB_DB_HOST}'/" ${VMB_PATH}/application/configs/application.ini
 sed -i 's,defaults.mailbox.maildir = "maildir:/srv/vmail/%d/%u/mail:LAYOUT=fs",defaults.mailbox.maildir = "maildir:/home/vmail/%d/%u",'  ${VMB_PATH}/application/configs/application.ini
 sed -i 's,defaults.mailbox.homedir = "/srv/vmail/%d/%u",defaults.mailbox.homedir = "/home/vmail/%d/%u",' ${VMB_PATH}/application/configs/application.ini
-sed -i 's/defaults.mailbox.password_scheme = "BLF-CRYPT"/defaults.mailbox.password_scheme = "dovecot:SSHA512"/' ${VMB_PATH}/application/configs/application.ini
+sed -i 's/defaults.mailbox.password_scheme = "BLF-CRYPT"/defaults.mailbox.password_scheme = "dovecot:SHA512-CRYPT"/' ${VMB_PATH}/application/configs/application.ini
 sed -i 's/server.email.name = "ViMbAdmin Administrator"/server.email.name = "eMail Administrator"/' ${VMB_PATH}/application/configs/application.ini
 sed -i 's/server.email.address = "support@example.com"/server.email.address = "'${VMB_ADMIN_MAIL}'"/' ${VMB_PATH}/application/configs/application.ini
 echo
