@@ -5,10 +5,10 @@
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="3.9"
+ADOVMS_VER="4.0"
 
 # Roundcube version
-ROUNDCUBE="1.2.5"
+ROUNDCUBE="1.3.0"
 
 # Repositories
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm"
