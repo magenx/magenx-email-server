@@ -569,6 +569,8 @@ Selector        default
 MinimumKeyBits 1024
 KeyTable        /etc/opendkim/KeyTable
 SigningTable    refile:/etc/opendkim/SigningTable
+ExternalIgnoreList /etc/opendkim/TrustedHosts
+InternalHosts      /etc/opendkim/TrustedHosts
 END
 echo
 systemctl start opendkim.service
