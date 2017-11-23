@@ -54,9 +54,9 @@ virtual_uid_maps = static:5000
 virtual_gid_maps = static:5000
 virtual_transport = dovecot
 
-smtpd_restriction_classes = rbl_cbl_abuseat_org,
-                            rbl_sbl_spamhaus_org,
-                            rbl_spamcop,
+smtpd_restriction_classes = cbl_abuseat_org,
+                            zen_spamhaus_org,
+                            bl_spamcop_net,
                             white_client_ip,
                             black_client_ip,
                             block_dsl,
@@ -65,9 +65,14 @@ smtpd_restriction_classes = rbl_cbl_abuseat_org,
                             black_client,
                             mx_access
 
-rbl_cbl_abuseat_org  = reject_rbl_client cbl.abuseat.org
-rbl_sbl_spamhaus_org = reject_rbl_client sbl.spamhaus.org
-rbl_spamcop          = reject_rbl_client bl.spamcop.net
+cbl_abuseat_org  = reject_rbl_client cbl.abuseat.org
+zen_spamhaus_org = reject_rbl_client zen.spamhaus.org
+bl_spamcop_net   = reject_rbl_client bl.spamcop.net
+
+## add extra filters
+#rbl_spam_fr      = reject_rbl_client all.spam-rbl.fr
+#rbl_sorbs_net    = reject_rbl_client dnsbl.sorbs.net
+#rbl_bad_psky_me  = reject_rbl_client bad.psky.me
 
 white_client_ip      = check_client_access pcre:$additional_config_dir/white_client_ip
 black_client_ip      = check_client_access pcre:$additional_config_dir/black_client_ip
@@ -91,9 +96,9 @@ smtpd_client_restrictions = white_client_ip,
                             black_client,
                             helo_access,
                             block_dsl,
-                            rbl_sbl_spamhaus_org,
-                            rbl_spamcop,
-                            rbl_cbl_abuseat_org,
+                            zen_spamhaus_org,
+                            bl_spamcop_net,
+                            cbl_abuseat_org,
                             permit_mynetworks,
                             permit_sasl_authenticated,
                             reject_unauth_destination,
