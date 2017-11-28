@@ -545,6 +545,7 @@ echo
 GREENTXT " DNS records for ${YELLOW}${BOLD}${DOMAIN} "
 cat /etc/opendkim/keys/${DOMAIN}/default.txt
 echo "_adsp._domainkey.${DOMAIN} IN TXT dkim=unknown"
+echo "_dmarc.${DOMAIN}. IN TXT v=DMARC1; p=none; sp=none; rf=afrf; pct=100; ri=86400"
 WHITETXT "============================================================================="
 done
 echo
