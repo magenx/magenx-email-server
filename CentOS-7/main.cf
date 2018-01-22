@@ -146,5 +146,6 @@ debugger_command =
 
 sendmail_path = /usr/sbin/sendmail.postfix
 newaliases_path = /usr/bin/newaliases.postfix
+alias_maps = hash:/etc/aliases
 mailq_path = /usr/bin/mailq.postfix
 setgid_group = postdrop
