@@ -54,9 +54,17 @@ virtual_uid_maps = static:5000
 virtual_gid_maps = static:5000
 virtual_transport = dovecot
 
-smtpd_restriction_classes = cbl_abuseat_org,
-                            zen_spamhaus_org,
-                            bl_spamcop_net,
+smtpd_restriction_classes = rbl_abuseat_org,
+                            rbl_spamhaus_org,
+                            rbl_spamcop_net,
+			    rbl_zapbl,
+			    rbl_sorbs,
+			    rbl_uceprotect,
+			    rbl_fabel,
+			    rbl_truncate,
+			    rbl_dnsrbl,
+			    rbl_spam_fr,
+			    rbl_bad_psky_me,
                             white_client_ip,
                             black_client_ip,
                             block_dsl,
@@ -65,14 +73,17 @@ smtpd_restriction_classes = cbl_abuseat_org,
                             black_client,
                             mx_access
 
-cbl_abuseat_org  = reject_rbl_client cbl.abuseat.org
-zen_spamhaus_org = reject_rbl_client zen.spamhaus.org
-bl_spamcop_net   = reject_rbl_client bl.spamcop.net
-
-## add extra filters
-#rbl_spam_fr      = reject_rbl_client all.spam-rbl.fr
-#rbl_sorbs_net    = reject_rbl_client dnsbl.sorbs.net
-#rbl_bad_psky_me  = reject_rbl_client bad.psky.me
+rbl_abuseat_org      = reject_rbl_client cbl.abuseat.org
+rbl_spamhaus_org     = reject_rbl_client zen.spamhaus.org
+rbl_spamcop_net      = reject_rbl_client bl.spamcop.net
+rbl_zapbl            = reject_rbl_client rhsbl.zapbl.net
+rbl_sorbs            = reject_rbl_client dnsbl.sorbs.net
+rbl_uceprotect       = reject_rbl_client dnsbl-1.uceprotect.net
+rbl_fabel            = reject_rbl_client spamsources.fabel.dk
+rbl_truncate         = reject_rbl_client truncate.gbudb.net
+rbl_dnsrbl           = reject_rbl_client dnsrbl.org
+rbl_spam_fr          = reject_rbl_client all.spam-rbl.fr
+rbl_bad_psky_me      = reject_rbl_client bad.psky.me
 
 white_client_ip      = check_client_access pcre:$additional_config_dir/white_client_ip
 black_client_ip      = check_client_access pcre:$additional_config_dir/black_client_ip
@@ -90,15 +101,23 @@ milter_protocol   = 6
 #notify_classes = bounce, delay, policy, protocol, resource, software
 #error_notice_recipient = VMB_ADMIN_MAIL
 
-smtpd_client_restrictions = white_client_ip,
+smtpd_client_restrictions = rbl_abuseat_org,
+                            rbl_spamhaus_org,
+                            rbl_spamcop_net,
+			    rbl_zapbl,
+			    rbl_sorbs,
+			    rbl_uceprotect,
+			    rbl_fabel,
+			    rbl_truncate,
+			    rbl_dnsrbl,
+			    rbl_spam_fr,
+			    rbl_bad_psky_me,
+			    white_client_ip,
                             black_client_ip,
                             white_client,
                             black_client,
                             helo_access,
                             block_dsl,
-                            zen_spamhaus_org,
-                            bl_spamcop_net,
-                            cbl_abuseat_org,
                             permit_mynetworks,
                             permit_sasl_authenticated,
                             reject_unauth_destination,
