@@ -1,14 +1,14 @@
 #!/bin/bash
 #====================================================================#
 #  MagenX - Automated Deployment of Virtual Mail Server              #
-#  Copyright (C) 2018 admin@magenx.com                               #
+#  Copyright (C) 2019 admin@magenx.com                               #
 #  All rights reserved.                                              #
 #====================================================================#
 # version
 ADOVMS_VER="4.0"
 
 # Roundcube version
-ROUNDCUBE="1.3.4"
+ROUNDCUBE="1.3.8"
 
 # Repositories
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm"
@@ -161,7 +161,7 @@ echo
 #                                     CHECKS END                                  #
 ###################################################################################
 echo
-if grep -q "yes" /root/adovms/.terms >/dev/null 2>&1 ; then
+if grep -q "yes" /root/magenx-email-server/.terms >/dev/null 2>&1 ; then
 echo "...... loading menu"
 sleep 1
       else
@@ -180,8 +180,8 @@ sleep 1
  	read terms_agree
         if [ "$terms_agree" == "y" ];then
           echo
-            mkdir -p /root/adovms
-            echo "yes" > /root/adovms/.terms
+            mkdir -p /root/magenx-email-server
+            echo "yes" > /root/magenx-email-server/.terms
             else
             echo "Exiting"
            exit 1
@@ -294,7 +294,7 @@ if [ "${vmb_down}" == "y" ];then
                 ./composer install
 		cp ${VMB_PATH}/public/.htaccess.dist ${VMB_PATH}/public/.htaccess
 echo
-cat > /root/adovms/.adovms_index <<END
+cat > /root/magenx-email-server/.magenx-email-server_index <<END
 mail	${VMB_PATH}
 END
 fi
@@ -586,7 +586,7 @@ echo
 WHITETXT "============================================================================="
 WHITETXT "============================================================================="
 echo
-VMB_PATH=$(awk '/mail/ {print $2}' /root/adovms/.adovms_index)
+VMB_PATH=$(awk '/mail/ {print $2}' /root/magenx-email-server/.magenx-email-server_index)
 WHITETXT "Now we will try to edit ViMbAdmin v3 application.ini file:"
 WHITETXT "${VMB_PATH}/application/configs/application.ini"
 cd ${VMB_PATH}
