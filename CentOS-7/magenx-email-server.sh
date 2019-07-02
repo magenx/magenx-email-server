@@ -5,10 +5,10 @@
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="4.0"
+ADOVMS_VER="5.0"
 
 # Roundcube version
-ROUNDCUBE="1.3.8"
+ROUNDCUBE="1.3.9"
 
 # Repositories
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm"
@@ -142,11 +142,11 @@ which php > /dev/null 2>&1
   then
   # we need php > 5.4.0
   PHPVER=$(php -v | head -1 | awk {'print $2'})
-  if echo ${PHPVER} 5.4.0 | awk '{exit !( $1 > $2)}'; then
+  if echo ${PHPVER} 7.2.0 | awk '{exit !( $1 > $2)}'; then
     GREENTXT "PASS: YOUR PHP IS ${WHITE}${BOLD}${PHPVER}"
     else
-    REDTXT "ERROR: YOUR PHP VERSION IS NOT > 5.4"
-    YELLOWTXT "------> CONFIGURATION FOR PHP > 5.4 ONLY."
+    REDTXT "ERROR: YOUR PHP VERSION IS NOT > 7.2"
+    YELLOWTXT "------> CONFIGURATION FOR PHP > 7.2 ONLY."
     echo
     exit 1
   fi
@@ -161,8 +161,7 @@ echo
 #                                     CHECKS END                                  #
 ###################################################################################
 echo
-if grep -q "yes" /root/magenx-email-server/.terms >/dev/null 2>&1 ; then
-echo "...... loading menu"
+if grep -q "yes" /root/magenx/.terms_es >/dev/null 2>&1 ; then
 sleep 1
       else
         YELLOWTXT "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -180,8 +179,8 @@ sleep 1
  	read terms_agree
         if [ "$terms_agree" == "y" ];then
           echo
-            mkdir -p /root/magenx-email-server
-            echo "yes" > /root/magenx-email-server/.terms
+            mkdir -p /root/magenx
+            echo "yes" > /root/magenx/.terms_es
             else
             echo "Exiting"
            exit 1
@@ -294,7 +293,7 @@ if [ "${vmb_down}" == "y" ];then
                 ./composer install
 		cp ${VMB_PATH}/public/.htaccess.dist ${VMB_PATH}/public/.htaccess
 echo
-cat > /root/magenx-email-server/.magenx-email-server_index <<END
+cat > /root/magenx/.magenx-email-server_index <<END
 mail	${VMB_PATH}
 END
 fi
@@ -586,7 +585,7 @@ echo
 WHITETXT "============================================================================="
 WHITETXT "============================================================================="
 echo
-VMB_PATH=$(awk '/mail/ {print $2}' /root/magenx-email-server/.magenx-email-server_index)
+VMB_PATH=$(awk '/mail/ {print $2}' /root/magenx/.magenx-email-server_index)
 WHITETXT "Now we will try to edit ViMbAdmin v3 application.ini file:"
 WHITETXT "${VMB_PATH}/application/configs/application.ini"
 cd ${VMB_PATH}
