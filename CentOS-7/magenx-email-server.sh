@@ -5,10 +5,10 @@
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="5.0"
+ADOVMS_VER="6.0"
 
 # Roundcube version
-ROUNDCUBE="1.3.9"
+ROUNDCUBE="1.3.10"
 
 # Repositories
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm"
@@ -232,8 +232,9 @@ if [ "${mail_install}" == "y" ];then
     pear install ${PEAR} >/dev/null 2>&1
     yum -q -y install epel-release
     yum -q -y install ${REPO_GF}
-    yum --enablerepo=gf-plus -y install ${MAIL_PACKAGES}
-    yum --enablerepo=epel-testing -y install ${EXTRA_PACKAGES} 
+    yum-config-manager --enable gf-plus >/dev/null 2>&1
+    yum -y install ${MAIL_PACKAGES}
+    yum -y install ${EXTRA_PACKAGES} 
     echo
     echo
     rpm --quiet -q postfix3
@@ -455,6 +456,15 @@ read -e -p "---> Enter your hostname : " VMB_MYHOSTNAME
 read -e -p "---> Enter your admin email : " VMB_ADMIN_MAIL
 read -e -p "---> Enter your ssl cert location: " -i "/etc/letsencrypt/live/example.com/fullchain.pem"  VMB_SSL_CRT
 read -e -p "---> Enter your ssl key location: " -i "/etc/letsencrypt/live/example.com/privkey.pem"  VMB_SSL_KEY
+
+WHITETXT "SYSTEM AUTO UPDATE WITH YUM-CRON"
+sed -i 's/apply_updates = no/apply_updates = yes/' /etc/yum/yum-cron.conf
+sed -i 's/emit_via = stdio/emit_via = email/' /etc/yum/yum-cron.conf
+sed -i "s/email_from = root@localhost/email_from = yum-cron@${VMB_DOMAIN}/" /etc/yum/yum-cron.conf
+sed -i "s/email_to = root/email_to = ${VMB_ADMIN_MAIL}/" /etc/yum/yum-cron.conf
+systemctl enable yum-cron >/dev/null 2>&1
+systemctl restart yum-cron >/dev/null 2>&1
+echo
 
 wget -qO /etc/postfix/main.cf ${POSTFIX_MAIN_CF}
 sed -i "s,VMB_SSL_CRT,${VMB_SSL_CRT}," /etc/postfix/main.cf
