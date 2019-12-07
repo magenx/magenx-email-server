@@ -14,7 +14,7 @@ ROUNDCUBE="1.4.1"
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm"
 
 # Extra packages
-MAIL_PACKAGES="postfix3 postfix3-cdb postfix3-mysql postfix3-pcre postfix3-perl-scripts postfix3-sqlite dovecot22 dovecot22-mysql dovecot22-pigeonhole clamav-filesystem clamav-server clamav-update clamav-milter-systemd clamav-data clamav-server-systemd clamav-scanner-systemd clamav clamav-milter clamav-lib clamav-scanner"
+MAIL_PACKAGES="postfix3 postfix3-cdb postfix3-mysql postfix3-pcre postfix3-perl-scripts postfix3-sqlite dovecot23 dovecot23-mysql dovecot23-pigeonhole clamav-filesystem clamav-server clamav-update clamav-milter-systemd clamav-data clamav-server-systemd clamav-scanner-systemd clamav clamav-milter clamav-lib clamav-scanner"
 EXTRA_PACKAGES="opendkim git subversion libicu"
 
 # PEAR packages
