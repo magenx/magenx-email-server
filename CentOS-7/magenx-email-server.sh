@@ -1,14 +1,14 @@
 #!/bin/bash
 #====================================================================#
 #  MagenX - Automated Deployment of Virtual Mail Server              #
-#  Copyright (C) 2019 admin@magenx.com                               #
+#  Copyright (C) 2016-2020 admin@magenx.com                          #
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="10.0"
+ADOVMS_VER="11.0"
 
 # Roundcube version
-ROUNDCUBE="1.4.1"
+ROUNDCUBE="1.4.2"
 
 # Repositories
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm"
