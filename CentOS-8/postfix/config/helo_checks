@@ -1,0 +1,7 @@
+#/^\[?10\.\d{1,3}\.\d{1,3}\.\d{1,3}\]?$/ REJECT Address in RFC 1918 private network
+#/^\[?192\.\d{1,3}\.\d{1,3}\.\d{1,3}\]?$/ REJECT Address in RFC 1918 private network
+#/^\[?172\.\d{1,3}\.\d{1,3}\.\d{1,3}\]?$/ REJECT Address in RFC 1918 private network
+#/\d{2,}[-\.]+\d{2,}/ REJECT Invalid hostname (D-D)
+#/^(((newm|em|gm|m)ail|yandex|rambler|hotbox|chat|rbc|subscribe|spbnit)\.ru)$/ REJECT Faked hostname (\$1)
+#/^(((hotmail|mcim|newm|em)ail|post|hotbox|msn|microsoft|aol|news|compuserve|yahoo|google|earthlink|netscape)\.(com|net))$/ REJECT Faked hostname (\$1)
+#/[^[] *[0-9]+((\.|-|_)[0-9]+){3}/ REJECT Invalid hostname (ipable)

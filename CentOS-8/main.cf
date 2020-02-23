@@ -1,0 +1,170 @@
+
+smtpd_banner = ${myhostname} ESMTP XBOX
+
+queue_run_delay = 1h
+minimal_backoff_time = 1h
+maximal_queue_lifetime = 3h
+maximal_backoff_time = 3h
+bounce_queue_lifetime = 3h
+
+
+biff = no
+append_dot_mydomain = no
+inet_interfaces = all
+dovecot_destination_recipient_limit = 1
+
+disable_vrfy_command = yes
+broken_sasl_auth_clients = no
+
+additional_config_dir = /etc/postfix/config
+
+smtpd_forbidden_commands = CONNECT GET POST
+smtpd_tls_cert_file = VMB_SSL_CRT
+smtpd_tls_key_file = VMB_SSL_KEY
+smtp_tls_CAfile = 
+smtpd_tls_auth_only = yes
+smtpd_tls_security_level = may
+smtpd_tls_protocols=!SSLv2,!SSLv3
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_helo_required = yes
+smtpd_reject_unlisted_sender = yes
+smtpd_reject_unlisted_recipient = yes
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtp_tls_security_level = may
+smtp_tls_protocols=!SSLv2,!SSLv3
+smtp_always_send_ehlo = yes
+smtp_reply_filter = pcre:/etc/postfix/smtp_reply_filter
+
+myhostname = VMB_MYHOSTNAME
+mydomain = VMB_DOMAIN
+mydestination = localhost
+mynetworks = 127.0.0.0/8 [::1]/128
+myorigin = ${mydomain}
+
+mailbox_size_limit = 0
+
+virtual_mailbox_domains = mysql:/etc/postfix/mysql/virtual-mailbox-domains.cf
+virtual_mailbox_maps = mysql:/etc/postfix/mysql/virtual-mailbox-maps.cf
+virtual_alias_maps = mysql:/etc/postfix/mysql/virtual-alias-maps.cf
+virtual_uid_maps = static:5000
+virtual_gid_maps = static:5000
+virtual_transport = dovecot
+
+smtpd_restriction_classes = rbl_abuseat_org,
+                            rbl_spamhaus_org,
+                            rbl_spamcop_net,
+			    rbl_zapbl,
+			    rbl_sorbs,
+			    rbl_uceprotect,
+			    rbl_fabel,
+			    rbl_truncate,
+			    rbl_dnsrbl,
+			    rbl_spam_fr,
+			    rbl_bad_psky_me,
+                            white_client_ip,
+                            black_client_ip,
+                            block_dsl,
+                            helo_access,
+                            white_client,
+                            black_client,
+                            mx_access
+
+rbl_abuseat_org      = reject_rbl_client cbl.abuseat.org
+rbl_spamhaus_org     = reject_rbl_client zen.spamhaus.org
+rbl_spamcop_net      = reject_rbl_client bl.spamcop.net
+rbl_zapbl            = reject_rbl_client rhsbl.zapbl.net
+rbl_sorbs            = reject_rbl_client dnsbl.sorbs.net
+rbl_uceprotect       = reject_rbl_client dnsbl-1.uceprotect.net
+rbl_fabel            = reject_rbl_client spamsources.fabel.dk
+rbl_truncate         = reject_rbl_client truncate.gbudb.net
+rbl_dnsrbl           = reject_rbl_client dnsrbl.org
+rbl_spam_fr          = reject_rbl_client all.spam-rbl.fr
+rbl_bad_psky_me      = reject_rbl_client bad.psky.me
+
+white_client_ip      = check_client_access pcre:$additional_config_dir/white_client_ip
+black_client_ip      = check_client_access pcre:$additional_config_dir/black_client_ip
+white_client         = check_sender_access pcre:$additional_config_dir/white_client
+black_client         = check_sender_access pcre:$additional_config_dir/black_client
+block_dsl            = regexp:$additional_config_dir/block_dsl
+helo_access          = check_helo_access pcre:$additional_config_dir/helo_checks
+mx_access            = check_sender_mx_access cidr:$additional_config_dir/mx_access
+
+smtpd_milters           = inet:127.0.0.1:7357, inet:127.0.0.1:8891
+non_smtpd_milters       = ${smtpd_milters}
+milter_default_action   = quarantine
+milter_protocol   = 6
+
+#notify_classes = bounce, delay, policy, protocol, resource, software
+#error_notice_recipient = VMB_ADMIN_MAIL
+
+smtpd_client_restrictions = rbl_abuseat_org,
+                            rbl_spamhaus_org,
+                            rbl_spamcop_net,
+			    rbl_zapbl,
+			    rbl_sorbs,
+			    rbl_uceprotect,
+			    rbl_fabel,
+			    rbl_truncate,
+			    rbl_dnsrbl,
+			    rbl_spam_fr,
+			    rbl_bad_psky_me,
+			    white_client_ip,
+                            black_client_ip,
+                            white_client,
+                            black_client,
+                            helo_access,
+                            block_dsl,
+                            permit_mynetworks,
+                            permit_sasl_authenticated,
+                            reject_unauth_destination,
+                            reject_unauth_pipelining,
+                            reject_unknown_address,
+                            reject_unknown_recipient_domain,
+                            reject_unknown_sender_domain
+
+smtpd_sender_restrictions = white_client,
+                            white_client_ip,
+                            black_client_ip,
+                            reject_unknown_recipient_domain,
+                            reject_unknown_sender_domain,
+                            reject_non_fqdn_recipient,
+                            reject_non_fqdn_sender,
+                            permit_sasl_authenticated,
+                            permit_mynetworks,
+                            mx_access,
+                            reject_unlisted_sender,
+                            reject_unauth_destination
+				
+smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+
+smtpd_recipient_restrictions = white_client,
+                               helo_access,
+                               reject_unknown_recipient_domain,
+                               reject_unknown_sender_domain,
+                               reject_non_fqdn_recipient,
+                               reject_non_fqdn_sender,
+                               reject_unauth_pipelining,
+                               permit_sasl_authenticated,
+                               permit_mynetworks,
+                               reject_unlisted_recipient,
+                               reject_unknown_address,
+                               reject_unauth_destination,
+                               reject_multi_recipient_bounce
+
+smtpd_data_restrictions = reject_unauth_pipelining,
+                          reject_multi_recipient_bounce
+
+debug_peer_level = 2
+debugger_command =
+         PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+         ddd $daemon_directory/$process_name $process_id & sleep 5
+
+sendmail_path = /usr/sbin/sendmail.postfix
+newaliases_path = /usr/bin/newaliases.postfix
+alias_maps = hash:/etc/aliases
+mailq_path = /usr/bin/mailq.postfix
+setgid_group = postdrop

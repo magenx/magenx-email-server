@@ -1,0 +1,4 @@
+# Convert Google Mail IPv6 complaint permanent error into a temporary error.
+# This way Postfix will attempt to deliver this e-mail using another MX
+# (via IPv4).
+/^5(\d\d )5(.*information. \S+ - gsmtp.*)/ 4${1}4$2

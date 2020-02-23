@@ -1,0 +1,11 @@
+#/^dsl.*\..*/i                   553 AUTO_DSL Please use your internet provider SMTP Server.
+#/.*\.dsl\..*/i                  553 AUTO_DSL2 Please use your internet provider SMTP Server.
+#/[a|x]dsl.*\..*\..*/i           553 AUTO_[A|X]DSL Please use your internet provider SMTP Server.
+#/client.*\..*\..*/i             553 AUTO_CLIENT Please use your internet provider SMTP Server.
+#/cable.*\..*\..*/i              553 AUTO_CABLE Please use your internet provider SMTP Server.
+#/pool\..*/i                     553 AUTO_POOL Please use your internet provider SMTP Server.
+#/.*dial(\.|-).*\..*\..*/i       553 AUTO_DIAL Please use your internet provider SMTP Server.
+#/ppp.*\..*/i                    553 AUTO_PPP Please use your internet provider SMTP Server.
+#/dslam.*\..*\..*/i              553 AUTO_DSLAM Please use your internet provider SMTP Server.
+#/dslb.*\..*\..*/i               553 AUTO_DSLB Please use your internet provider SMTP Server.
+#/node.*\..*\..*/i               553 AUTO_NODE Please use your internet provider SMTP Server.

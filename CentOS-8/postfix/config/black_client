@@ -1,0 +1,4 @@
+#/123\.45\.67\.89/       REJECT        Your IP was banned!
+#/123\.45/               REJECT        Your IP-range was banned!
+#/xyz\.ua/               REJECT        Your Domain was banned!
+#cc\.zxc\.ua/            REJECT        Your Domain was banned!
