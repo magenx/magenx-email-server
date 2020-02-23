@@ -5,36 +5,36 @@
 #  All rights reserved.                                              #
 #====================================================================#
 # version
-ADOVMS_VER="11.0"
+MAGENX_MAIL_VER="1.8.143.0"
 
 # Roundcube version
-ROUNDCUBE="1.4.2"
+ROUNDCUBE="1.4.3"
 
 # Repositories
-REPO_GF="http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm"
+REPO_GF="http://mirror.ghettoforge.org/distributions/gf/el/8/gf/x86_64/gf-release-8-11.gf.el8.noarch.rpm"
 
 # Extra packages
-MAIL_PACKAGES="postfix3 postfix3-cdb postfix3-mysql postfix3-pcre postfix3-perl-scripts postfix3-sqlite dovecot23 dovecot23-mysql dovecot23-pigeonhole clamav-filesystem clamav-server clamav-update clamav-milter-systemd clamav-data clamav-server-systemd clamav-scanner-systemd clamav clamav-milter clamav-lib clamav-scanner"
+MAIL_PACKAGES="postfix3 postfix3-cdb postfix3-mysql postfix3-pcre postfix3-utils postfix3-sqlite dovecot23 dovecot23-mysql dovecot23-pigeonhole clamav-filesystem clamav-server clamav-update clamav-milter-systemd clamav-data clamav-server-systemd clamav-scanner-systemd clamav clamav-milter clamav-lib clamav-scanner"
 EXTRA_PACKAGES="opendkim git subversion libicu"
 
 # PEAR packages
 PEAR="Net_IDNA2 Mail_mime Mail_mimeDecode Net_LDAP3 Auth_SASL Net_SMTP"
 
 # Configs
-POSTFIX_MAIN_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/main.cf"
-POSTFIX_MASTER_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/master.cf"
-POSTFIX_REPLY_FILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/smtp_reply_filter"
-DOVECOT_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/dovecot.conf"
-DOVECOT_SQL_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/dovecot-sql.conf"
-CLAMAV_MILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/clamav-milter.conf"
-CLAMAV_SCAN="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/mailscan.conf"
+POSTFIX_MAIN_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/main.cf"
+POSTFIX_MASTER_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/master.cf"
+POSTFIX_REPLY_FILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/smtp_reply_filter"
+DOVECOT_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/dovecot.conf"
+DOVECOT_SQL_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/dovecot-sql.conf"
+CLAMAV_MILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/clamav-milter.conf"
+CLAMAV_SCAN="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/mailscan.conf"
 
 # Virus alert
-VIRUS_ALERT="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/virus_alert.sh"
+VIRUS_ALERT="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/virus_alert.sh"
 
 # Postfix filters
 POSTFIX_FILTERS="black_client black_client_ip block_dsl helo_checks mx_access white_client white_client_ip"
-POSTFIX_FILTERS_URL="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/postfix/config/"
+POSTFIX_FILTERS_URL="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/postfix/config/"
 
 # Simple colors
 RED="\e[31;40m"
@@ -99,13 +99,13 @@ if [[ ${EUID} -ne 0 ]]; then
   GREENTXT "PASS: ROOT!"
 fi
 
-# do we have CentOS 7?
-if grep "CentOS.* 7\." /etc/redhat-release  > /dev/null 2>&1; then
-  GREENTXT "PASS: CENTOS RELEASE 7"
+# do we have CentOS 8?
+if grep "CentOS.* 8\." /etc/redhat-release  > /dev/null 2>&1; then
+  GREENTXT "PASS: CENTOS RELEASE 8"
   else
   echo
-  REDTXT "ERROR: UNABLE TO DETERMINE DISTRIBUTION TYPE."
-  YELLOWTXT "------> THIS CONFIGURATION FOR CENTOS 7"
+  REDTXT "ERROR: UNABLE TO READ DISTRIBUTION TYPE."
+  YELLOWTXT "------> THIS CONFIGURATION FOR CENTOS 8"
   echo
   exit 1
 fi
@@ -140,7 +140,7 @@ fi
 which php > /dev/null 2>&1
  if [ "$?" = 0 ]
   then
-  # we need php > 5.4.0
+  # we need php > 7.0
   PHPVER=$(php -v | head -1 | awk {'print $2'})
   if echo ${PHPVER} 7.2.0 | awk '{exit !( $1 > $2)}'; then
     GREENTXT "PASS: YOUR PHP IS ${WHITE}${BOLD}${PHPVER}"
@@ -161,7 +161,7 @@ echo
 #                                     CHECKS END                                  #
 ###################################################################################
 echo
-if grep -q "yes" /root/magenx/.terms_es >/dev/null 2>&1 ; then
+if grep -q "yes" /opt/magenx/cfg/.terms_es >/dev/null 2>&1 ; then
 sleep 1
       else
         YELLOWTXT "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -179,8 +179,8 @@ sleep 1
  	read terms_agree
         if [ "$terms_agree" == "y" ];then
           echo
-            mkdir -p /root/magenx
-            echo "yes" > /root/magenx/.terms_es
+            mkdir -p /opt/magenx/cfg
+            echo "yes" > /opt/magenx/cfg/.terms_es
             else
             echo "Exiting"
            exit 1
@@ -195,7 +195,7 @@ showMenu () {
 printf "\033c"
         echo
         echo
-        echo -e "${DGREYBG}${BOLD}  Virtual Mail Server Configuration v.${ADOVMS_VER}  ${RESET}"
+        echo -e "${DGREYBG}${BOLD}  Virtual Mail Server Configuration v.${MAGENX_MAIL_VER}  ${RESET}"
         echo -e "\t\t${BLUE}${BOLD}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  ${RESET}"
         echo
         echo -e "\t\t${WHITE}${BOLD}-> For packages installation enter     :  ${YELLOW} packages  ${RESET}"
@@ -225,16 +225,17 @@ echo -n "---> Start mail packages installation? [y/n][n]:"
 read mail_install
 if [ "${mail_install}" == "y" ];then
     echo
-    GREENTXT "Running mail packages installation"
-    rpm -e --nodeps postfix >/dev/null 2>&1
+    GREENTXT "Mail packages installation"
+    dnf remove postfix --noautoremove >/dev/null 2>&1
     echo
     pear config-set preferred_state alpha >/dev/null 2>&1
     pear install ${PEAR} >/dev/null 2>&1
-    yum -q -y install epel-release
-    yum -q -y install ${REPO_GF}
-    yum-config-manager --enable gf-plus >/dev/null 2>&1
-    yum -y install ${MAIL_PACKAGES}
-    yum -y install ${EXTRA_PACKAGES} 
+    dnf -q -y install epel-release
+	dnf install -y dnf-utils
+	dnf config-manager --set-enabled PowerTools >/dev/null 2>&1
+    dnf -q -y install ${REPO_GF}
+    dnf --enablerepo=gf-testing install ${MAIL_PACKAGES}
+    dnf -y install ${EXTRA_PACKAGES} 
     echo
     echo
     rpm --quiet -q postfix3
@@ -282,11 +283,11 @@ if [ "${vmb_down}" == "y" ];then
 		###################################################
 		git config --global url."https://".insteadOf git://
 		###################################################
-                git clone git://github.com/opensolutions/ViMbAdmin.git .
+        git clone git://github.com/opensolutions/ViMbAdmin.git .
 		echo
 		echo "  Installing Third Party Libraries"
 		echo
-                cd ${VMB_PATH}
+        cd ${VMB_PATH}
 		echo "  Get composer"
 		curl -sS https://getcomposer.org/installer | php
 		mv composer.phar composer
@@ -294,7 +295,7 @@ if [ "${vmb_down}" == "y" ];then
                 ./composer install
 		cp ${VMB_PATH}/public/.htaccess.dist ${VMB_PATH}/public/.htaccess
 echo
-cat > /root/magenx/.magenx-email-server_index <<END
+cat > /opt/magenx/cfg/.magenx-email-server_index <<END
 mail	${VMB_PATH}
 END
 fi
@@ -457,15 +458,6 @@ read -e -p "---> Enter your admin email : " VMB_ADMIN_MAIL
 read -e -p "---> Enter your ssl cert location: " -i "/etc/letsencrypt/live/example.com/fullchain.pem"  VMB_SSL_CRT
 read -e -p "---> Enter your ssl key location: " -i "/etc/letsencrypt/live/example.com/privkey.pem"  VMB_SSL_KEY
 
-WHITETXT "SYSTEM AUTO UPDATE WITH YUM-CRON"
-sed -i 's/apply_updates = no/apply_updates = yes/' /etc/yum/yum-cron.conf
-sed -i 's/emit_via = stdio/emit_via = email/' /etc/yum/yum-cron.conf
-sed -i "s/email_from = root@localhost/email_from = yum-cron@${VMB_DOMAIN}/" /etc/yum/yum-cron.conf
-sed -i "s/email_to = root/email_to = ${VMB_ADMIN_MAIL}/" /etc/yum/yum-cron.conf
-systemctl enable yum-cron >/dev/null 2>&1
-systemctl restart yum-cron >/dev/null 2>&1
-echo
-
 wget -qO /etc/postfix/main.cf ${POSTFIX_MAIN_CF}
 sed -i "s,VMB_SSL_CRT,${VMB_SSL_CRT}," /etc/postfix/main.cf
 sed -i "s,VMB_SSL_KEY,${VMB_SSL_KEY}," /etc/postfix/main.cf
@@ -595,7 +587,7 @@ echo
 WHITETXT "============================================================================="
 WHITETXT "============================================================================="
 echo
-VMB_PATH=$(awk '/mail/ {print $2}' /root/magenx/.magenx-email-server_index)
+VMB_PATH=$(awk '/mail/ {print $2}' /opt/magenx/cfg/.magenx-email-server_index)
 WHITETXT "Now we will try to edit ViMbAdmin v3 application.ini file:"
 WHITETXT "${VMB_PATH}/application/configs/application.ini"
 cd ${VMB_PATH}
