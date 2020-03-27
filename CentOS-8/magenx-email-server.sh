@@ -4,11 +4,12 @@
 #  Copyright (C) 2016-2020 admin@magenx.com                          #
 #  All rights reserved.                                              #
 #====================================================================#
-# version
-MAGENX_MAIL_VER="1.8.143.0"
 
 # Roundcube version
 ROUNDCUBE="$(curl -s https://api.github.com/repos/roundcube/roundcubemail/releases 2>&1 | head -9 | grep -oP '(?<=")\d.*(?=")')"
+
+# version
+MAGENX_MAIL_VER="1.8.${ROUNDCUBE//./}.0"
 
 # Repositories
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/el/8/gf/x86_64/gf-release-8-11.gf.el8.noarch.rpm"
