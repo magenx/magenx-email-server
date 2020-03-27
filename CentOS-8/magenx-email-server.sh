@@ -8,7 +8,7 @@
 MAGENX_MAIL_VER="1.8.143.0"
 
 # Roundcube version
-ROUNDCUBE="1.4.3"
+ROUNDCUBE="$(curl -s https://api.github.com/repos/roundcube/roundcubemail/releases 2>&1 | head -9 | grep -oP '(?<=")\d.*(?=")')"
 
 # Repositories
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/el/8/gf/x86_64/gf-release-8-11.gf.el8.noarch.rpm"
