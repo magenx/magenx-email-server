@@ -11,11 +11,8 @@ ROUNDCUBE="$(curl -s https://api.github.com/repos/roundcube/roundcubemail/releas
 # version
 MAGENX_MAIL_VER="1.8.${ROUNDCUBE//./}.0"
 
-# Repositories
-REPO_GF="http://mirror.ghettoforge.org/distributions/gf/el/8/gf/x86_64/gf-release-8-11.gf.el8.noarch.rpm"
-
 # Extra packages
-MAIL_PACKAGES="postfix3 postfix3-cdb postfix3-mysql postfix3-pcre postfix3-utils postfix3-sqlite dovecot23 dovecot23-mysql dovecot23-pigeonhole clamav-filesystem clamav-server clamav-update clamav-milter-systemd clamav-data clamav-server-systemd clamav-scanner-systemd clamav clamav-milter clamav-lib clamav-scanner"
+MAIL_PACKAGES="postfix postfix-cdb postfix-mysql postfix-pcre postfix-utils postfix-sqlite dovecot dovecot-mysql dovecot-pigeonhole clamav-filesystem clamav-server clamav-update clamav-milter-systemd clamav-data clamav-server-systemd clamav-scanner-systemd clamav clamav-milter clamav-lib clamav-scanner"
 EXTRA_PACKAGES="opendkim git subversion libicu"
 
 # PEAR packages
@@ -234,12 +231,11 @@ if [ "${mail_install}" == "y" ];then
     dnf -q -y install epel-release
 	dnf install -y dnf-utils
 	dnf config-manager --set-enabled PowerTools >/dev/null 2>&1
-    dnf -q -y install ${REPO_GF}
-    dnf --enablerepo=gf-testing install ${MAIL_PACKAGES}
+    dnf -y install ${MAIL_PACKAGES}
     dnf -y install ${EXTRA_PACKAGES} 
     echo
     echo
-    rpm --quiet -q postfix3
+    rpm --quiet -q postfix
     if [ $? = 0 ]
       then
         echo
