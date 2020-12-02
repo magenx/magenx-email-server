@@ -554,7 +554,7 @@ echo
 GREENTXT " DNS records for ${YELLOW}${BOLD}${DOMAIN} "
 cat /etc/opendkim/keys/${DOMAIN}/default.txt
 echo "_adsp._domainkey.${DOMAIN} IN TXT dkim=unknown"
-echo "_dmarc.${DOMAIN}. IN TXT v=DMARC1; p=none; sp=none; rf=afrf; pct=100; ri=86400"
+echo "_dmarc.${DOMAIN}. IN TXT v=DMARC1; p=reject; pct=100; rua=mailto:report@${DOMAIN}; ruf=mailto:report@${DOMAIN}; fo=1"
 IPADDRESS=$(curl -s ifconfig.co)
 echo "${DOMAIN}.  IN TXT v=spf1 mx a ip4:${IPADDRESS} ~all"
 WHITETXT "============================================================================="
