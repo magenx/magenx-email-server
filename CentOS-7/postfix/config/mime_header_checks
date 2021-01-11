@@ -1,0 +1,1 @@
+/name=[^>]*\.(bat|com|exe|dll|vbs|iso)/ REJECT
