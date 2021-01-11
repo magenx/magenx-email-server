@@ -1,0 +1,8 @@
+/^Received:.*/              IGNORE
+/^X-PHP-Originating-Script:/  IGNORE
+/^X-Virus-Scanned:.*/ IGNORE
+/^X-Virus-Status:.*/ IGNORE
+/^X-Originating-IP:/    IGNORE
+/^X-Mailer:/            IGNORE
+/^Mime-Version:/        IGNORE
+/^To:\s*(.*)$/ PREPEND List-Unsubscribe: mailto:<unsubscribe@VMB_DOMAIN>?subject=unsubscribe
