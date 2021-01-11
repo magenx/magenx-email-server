@@ -33,7 +33,7 @@ CLAMAV_SCAN="https://raw.githubusercontent.com/magenx/magenx-email-server/master
 VIRUS_ALERT="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/virus_alert.sh"
 
 # Postfix filters
-POSTFIX_FILTERS="black_client black_client_ip block_dsl helo_checks mx_access white_client white_client_ip"
+POSTFIX_FILTERS="black_client black_client_ip block_dsl helo_checks mx_access white_client white_client_ip smtp_reply_filter"
 POSTFIX_FILTERS_URL="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-7/postfix/config/"
 
 # Simple colors
@@ -474,7 +474,6 @@ sed -i "s/VMB_DOMAIN/${VMB_DOMAIN}/" /etc/postfix/main.cf
 sed -i "s/VMB_ADMIN_MAIL/${VMB_ADMIN_MAIL}/" /etc/postfix/main.cf
 
 wget -qO /etc/postfix/master.cf ${POSTFIX_MASTER_CF}
-wget -qO /etc/postfix/smtp_reply_filter ${POSTFIX_REPLY_FILTER}
 
 echo
 WHITETXT "Writing Dovecot config file"
