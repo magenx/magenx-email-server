@@ -17,6 +17,7 @@ disable_vrfy_command = yes
 broken_sasl_auth_clients = no
 
 additional_config_dir = /etc/postfix/config
+mysql_config_dir = /etc/postfix/mysql
 
 smtpd_forbidden_commands = CONNECT GET POST
 smtpd_tls_cert_file = VMB_SSL_CRT
@@ -37,7 +38,10 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 smtp_tls_security_level = may
 smtp_tls_protocols=!SSLv2,!SSLv3
 smtp_always_send_ehlo = yes
-smtp_reply_filter = pcre:/etc/postfix/smtp_reply_filter
+smtp_reply_filter = pcre:$additional_config_dir/smtp_reply_filter
+
+mime_header_checks = regexp:$additional_config_dir/mime_header_checks
+header_checks = regexp:$additional_config_dir/header_checks
 
 myhostname = VMB_MYHOSTNAME
 mydomain = VMB_DOMAIN
@@ -47,9 +51,9 @@ myorigin = ${mydomain}
 
 mailbox_size_limit = 0
 
-virtual_mailbox_domains = mysql:/etc/postfix/mysql/virtual-mailbox-domains.cf
-virtual_mailbox_maps = mysql:/etc/postfix/mysql/virtual-mailbox-maps.cf
-virtual_alias_maps = mysql:/etc/postfix/mysql/virtual-alias-maps.cf
+virtual_mailbox_domains = mysql:$mysql_config_dir/virtual-mailbox-domains.cf
+virtual_mailbox_maps = mysql:$mysql_config_dir/virtual-mailbox-maps.cf
+virtual_alias_maps = mysql:$mysql_config_dir/virtual-alias-maps.cf
 virtual_uid_maps = static:5000
 virtual_gid_maps = static:5000
 virtual_transport = dovecot
