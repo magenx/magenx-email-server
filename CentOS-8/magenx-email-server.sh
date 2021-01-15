@@ -6,7 +6,7 @@
 #====================================================================#
 
 # Roundcube version
-ROUNDCUBE="$(curl -s https://api.github.com/repos/roundcube/roundcubemail/releases 2>&1 | head -9 | grep -oP '(?<=")\d.*(?=")')"
+ROUNDCUBE="1.4.10"
 
 # version
 MAGENX_MAIL_VER="1.8.${ROUNDCUBE//./}.0"
