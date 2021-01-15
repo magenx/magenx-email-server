@@ -8,7 +8,7 @@
 ADOVMS_VER="11.0"
 
 # Roundcube version
-ROUNDCUBE="1.4.2"
+ROUNDCUBE="1.4.10"
 
 # Repositories
 REPO_GF="http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm"
