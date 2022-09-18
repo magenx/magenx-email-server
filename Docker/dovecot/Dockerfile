@@ -7,11 +7,12 @@ RUN <<EOF
   apk add --no-cache \
   ca-certificates \
   update-ca-certificates \
-	dovecot \
-	dovecot-lmtpd \
-	dovecot-mysql \
-	dovecot-pigeonhole-plugin
-  
+  dovecot \
+  dovecot-lmtpd \
+  dovecot-mysql \
+  dovecot-pigeonhole-plugin
+EOF
+
 ADD dovecot.conf /etc/dovecot/dovecot.conf
 ADD dovecot-sql.conf /etc/dovecot/dovecot-sql.conf
 
