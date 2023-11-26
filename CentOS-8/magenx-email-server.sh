@@ -6,7 +6,7 @@
 #====================================================================#
 
 # Roundcube version
-ROUNDCUBE="1.4.12"
+ROUNDCUBE="1.6.5"
 
 # version
 MAGENX_MAIL_VER="1.8.${ROUNDCUBE//./}.0"
