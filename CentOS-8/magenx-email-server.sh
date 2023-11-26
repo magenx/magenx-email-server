@@ -18,21 +18,23 @@ EXTRA_PACKAGES="opendkim git subversion libicu"
 # PEAR packages
 PEAR="Net_IDNA2 Mail_mime Mail_mimeDecode Net_LDAP3 Auth_SASL Net_SMTP"
 
+MAGENX_EMAIL_REPO="https://raw.githubusercontent.com/magenx/magenx-email-server/master"
+
 # Configs
-POSTFIX_MAIN_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/main.cf"
-POSTFIX_MASTER_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/master.cf"
-POSTFIX_REPLY_FILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/smtp_reply_filter"
-DOVECOT_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/dovecot.conf"
-DOVECOT_SQL_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/dovecot-sql.conf"
-CLAMAV_MILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/clamav-milter.conf"
-CLAMAV_SCAN="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/mailscan.conf"
+POSTFIX_MAIN_CF="${MAGENX_EMAIL_REPO}/Debian/main.cf"
+POSTFIX_MASTER_CF="${MAGENX_EMAIL_REPO}/Debian/master.cf"
+POSTFIX_REPLY_FILTER="${MAGENX_EMAIL_REPO}/Debian/smtp_reply_filter"
+DOVECOT_CONF="${MAGENX_EMAIL_REPO}/Debian/dovecot.conf"
+DOVECOT_SQL_CONF="${MAGENX_EMAIL_REPO}/Debian/dovecot-sql.conf"
+CLAMAV_MILTER="${MAGENX_EMAIL_REPO}/Debian/clamav-milter.conf"
+CLAMAV_SCAN="${MAGENX_EMAIL_REPO}/Debian/mailscan.conf"
 
 # Virus alert
-VIRUS_ALERT="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/virus_alert.sh"
+VIRUS_ALERT="${MAGENX_EMAIL_REPO}/Debian/virus_alert.sh"
 
 # Postfix filters
 POSTFIX_FILTERS="black_client black_client_ip block_dsl helo_checks mx_access white_client white_client_ip"
-POSTFIX_FILTERS_URL="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/postfix/config/"
+POSTFIX_FILTERS_URL="${MAGENX_EMAIL_REPO}/Debian/postfix/config/"
 
 # Simple colors
 RED="\e[31;40m"
@@ -201,18 +203,17 @@ read mail_install
 if [ "${mail_install}" == "y" ];then
     echo
     GREENTXT "Mail packages installation"
-    apt remove postfix --noautoremove >/dev/null 2>&1
-    echo
+    echo ""
     pear config-set preferred_state alpha >/dev/null 2>&1
     pear install ${PEAR} >/dev/null 2>&1
     apt update
     apt -y install ${MAIL_PACKAGES}
     apt -y install ${EXTRA_PACKAGES} 
-    echo
-    echo
+    echo ""
+    echo ""
     if [ $? = 0 ]
       then
-        echo
+        echo ""
         GREENTXT "INSTALLED"
         else
         REDTXT "ERROR"
@@ -321,7 +322,7 @@ printf "\033c"
 echo
 WHITETXT "Creating virtual mail User and Group"
 groupadd -g 5000 vmail
-useradd -g vmail -u 5000 vmail -d /home/vmail -m -s /sbin/nologin
+useradd -g vmail -u 5000 vmail -d /var/vmail -m -s /sbin/nologin
 echo
 WHITETXT "Creating ViMbAdmin MySQL DATABASE and USER"
 echo
@@ -566,8 +567,8 @@ sed -i "s/resources.doctrine2.connection.options.dbname   = 'vimbadmin'/resource
 sed -i "s/resources.doctrine2.connection.options.user     = 'vimbadmin'/resources.doctrine2.connection.options.user     = '${VMB_DB_USER_NAME}'/" ${VMB_PATH}/application/configs/application.ini
 sed -i "s/resources.doctrine2.connection.options.password = 'xxx'/resources.doctrine2.connection.options.password = '${VMB_PASSGEN}'/" ${VMB_PATH}/application/configs/application.ini
 sed -i "s/resources.doctrine2.connection.options.host     = 'localhost'/resources.doctrine2.connection.options.host     = '${VMB_DB_HOST}'/" ${VMB_PATH}/application/configs/application.ini
-sed -i 's,defaults.mailbox.maildir = "maildir:/srv/vmail/%d/%u/mail:LAYOUT=fs",defaults.mailbox.maildir = "maildir:/home/vmail/%d/%u",'  ${VMB_PATH}/application/configs/application.ini
-sed -i 's,defaults.mailbox.homedir = "/srv/vmail/%d/%u",defaults.mailbox.homedir = "/home/vmail/%d/%u",' ${VMB_PATH}/application/configs/application.ini
+sed -i 's,defaults.mailbox.maildir = "maildir:/srv/vmail/%d/%u/mail:LAYOUT=fs",defaults.mailbox.maildir = "maildir:/var/vmail/%d/%u",'  ${VMB_PATH}/application/configs/application.ini
+sed -i 's,defaults.mailbox.homedir = "/srv/vmail/%d/%u",defaults.mailbox.homedir = "/var/vmail/%d/%u",' ${VMB_PATH}/application/configs/application.ini
 sed -i 's/.*defaults.mailbox.password_scheme.*/defaults.mailbox.password_scheme = "dovecot:SHA512-CRYPT"/' ${VMB_PATH}/application/configs/application.ini
 sed -i 's/server.email.name = "ViMbAdmin Administrator"/server.email.name = "eMail Administrator"/' ${VMB_PATH}/application/configs/application.ini
 sed -i 's/server.email.address = "support@example.com"/server.email.address = "'${VMB_ADMIN_MAIL}'"/' ${VMB_PATH}/application/configs/application.ini
