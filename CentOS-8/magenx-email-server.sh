@@ -9,30 +9,30 @@
 ROUNDCUBE="1.6.5"
 
 # version
-MAGENX_MAIL_VER="1.8.${ROUNDCUBE//./}.0"
+MAGENX_MAIL_VER="2.${ROUNDCUBE//./}.0"
 
 # Extra packages
-MAIL_PACKAGES="postfix postfix-cdb postfix-mysql postfix-pcre postfix-utils postfix-sqlite dovecot dovecot-mysql dovecot-pigeonhole clamav-filesystem clamav-server clamav-update clamav-milter-systemd clamav-data clamav-server-systemd clamav-scanner-systemd clamav clamav-milter clamav-lib clamav-scanner"
+MAIL_PACKAGES="postfix postfix-cdb postfix-mysql postfix-pcre postfix-doc postfix-sqlite dovecot-core dovecot-mysql dovecot-imapd clamav-freshclam clamav-daemon clamav-milter clamav-base"
 EXTRA_PACKAGES="opendkim git subversion libicu"
 
 # PEAR packages
 PEAR="Net_IDNA2 Mail_mime Mail_mimeDecode Net_LDAP3 Auth_SASL Net_SMTP"
 
 # Configs
-POSTFIX_MAIN_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/main.cf"
-POSTFIX_MASTER_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/master.cf"
-POSTFIX_REPLY_FILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/smtp_reply_filter"
-DOVECOT_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/dovecot.conf"
-DOVECOT_SQL_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/dovecot-sql.conf"
-CLAMAV_MILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/clamav-milter.conf"
-CLAMAV_SCAN="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/mailscan.conf"
+POSTFIX_MAIN_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/main.cf"
+POSTFIX_MASTER_CF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/master.cf"
+POSTFIX_REPLY_FILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/smtp_reply_filter"
+DOVECOT_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/dovecot.conf"
+DOVECOT_SQL_CONF="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/dovecot-sql.conf"
+CLAMAV_MILTER="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/clamav-milter.conf"
+CLAMAV_SCAN="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/mailscan.conf"
 
 # Virus alert
-VIRUS_ALERT="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/virus_alert.sh"
+VIRUS_ALERT="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/virus_alert.sh"
 
 # Postfix filters
 POSTFIX_FILTERS="black_client black_client_ip block_dsl helo_checks mx_access white_client white_client_ip"
-POSTFIX_FILTERS_URL="https://raw.githubusercontent.com/magenx/magenx-email-server/master/CentOS-8/postfix/config/"
+POSTFIX_FILTERS_URL="https://raw.githubusercontent.com/magenx/magenx-email-server/master/Debian/postfix/config/"
 
 # Simple colors
 RED="\e[31;40m"
@@ -95,29 +95,6 @@ if [[ ${EUID} -ne 0 ]]; then
   exit 1
   else
   GREENTXT "PASS: ROOT!"
-fi
-
-# do we have CentOS 8?
-if grep "CentOS.* 8\." /etc/redhat-release  > /dev/null 2>&1; then
-  GREENTXT "PASS: CENTOS RELEASE 8"
-  else
-  echo
-  REDTXT "ERROR: UNABLE TO READ DISTRIBUTION TYPE."
-  YELLOWTXT "------> THIS CONFIGURATION FOR CENTOS 8"
-  echo
-  exit 1
-fi
-
-# check if x64.
-ARCH=$(uname -m)
-if [ "$ARCH" = "x86_64" ]; then
-  GREENTXT "PASS: YOUR ARCHITECTURE IS 64-BIT"
-  else
-  echo
-  REDTXT "ERROR: YOUR ARCHITECTURE IS 32-BIT?"
-  YELLOWTXT "------> CONFIGURATION FOR 64-BIT ONLY."
-  echo
-  exit 1
 fi
 
 # network is up?
@@ -224,18 +201,15 @@ read mail_install
 if [ "${mail_install}" == "y" ];then
     echo
     GREENTXT "Mail packages installation"
-    dnf remove postfix --noautoremove >/dev/null 2>&1
+    apt remove postfix --noautoremove >/dev/null 2>&1
     echo
     pear config-set preferred_state alpha >/dev/null 2>&1
     pear install ${PEAR} >/dev/null 2>&1
-    dnf -q -y install epel-release
-	dnf install -y dnf-utils
-	dnf config-manager --set-enabled PowerTools >/dev/null 2>&1
-    dnf -y install ${MAIL_PACKAGES}
-    dnf -y install ${EXTRA_PACKAGES} 
+    apt update
+    apt -y install ${MAIL_PACKAGES}
+    apt -y install ${EXTRA_PACKAGES} 
     echo
     echo
-    rpm --quiet -q postfix
     if [ $? = 0 ]
       then
         echo
@@ -246,7 +220,7 @@ if [ "${mail_install}" == "y" ];then
     fi
         echo
 	systemctl enable dovecot
-	alternatives --set mta /usr/sbin/sendmail.postfix
+	update-alternatives --set mta /usr/sbin/sendmail.postfix
         else
         YELLOWTXT "Mail packages installation skipped. Next step"
 fi
@@ -284,13 +258,8 @@ if [ "${vmb_down}" == "y" ];then
 		echo
 		echo "  Installing Third Party Libraries"
 		echo
-        cd ${VMB_PATH}
-		echo "  Get composer"
-		curl -sS https://getcomposer.org/installer | php
-		mv composer.phar composer
-		echo
-                ./composer install
-		cp ${VMB_PATH}/public/.htaccess.dist ${VMB_PATH}/public/.htaccess
+                cd ${VMB_PATH}
+                composer install
 echo
 cat > /opt/magenx/cfg/.magenx-email-server_index <<END
 mail	${VMB_PATH}
